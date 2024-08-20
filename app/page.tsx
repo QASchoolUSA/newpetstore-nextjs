@@ -1,7 +1,6 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 import Products from '@/components/Products';
-import Footer from '@/components/Footer';
 
 const SwiperComponent = dynamic(() => import('../components/Swiper'), {
   ssr: false,
@@ -15,7 +14,6 @@ export default function Home() {
       <SwiperComponent />
       </div>
       <Products/>
-      <Footer />
     </div>
   );
 }

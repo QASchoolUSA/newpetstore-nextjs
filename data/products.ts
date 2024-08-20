@@ -4,7 +4,6 @@ export const products = [
       name: 'Product 1',
       price: 29.99,
       image: '/assets/images/product-1.jpg',
-      link: '#link',
       category: 'Category 1',
     },
     {
