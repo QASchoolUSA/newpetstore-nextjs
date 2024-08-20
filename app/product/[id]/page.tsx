@@ -10,7 +10,7 @@ type Product = {
 };
 
 async function fetchProduct(id: string): Promise<Product | null> {
-  const res = await fetch(`http://localhost:3000/api/products/${id}`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/products/${id}`);
 
   if (!res.ok) {
     return null;
