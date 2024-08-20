@@ -11,16 +11,18 @@ const Products = ({ category }: { category?: string }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {filteredProducts.map((product) => (
                 <div key={product.id} className="border p-4 rounded-lg">
+                    <Link href={`/product/${product.id}`}>
                     <img
                         src={product.image}
                         alt={product.name}
                         className="w-full h-48 object-cover mb-4"
                     />
-                    <Link href='#void'>
+                    </Link>
+                    <Link href={`/product/${product.id}`}>
                         <h2 className="text-lg font-bold">{product.name}</h2>
                     </Link>
                     <p className="text-gray-600">${product.price.toFixed(2)}</p>
-                    <Link href={`/products/${product.id}`} className="mt-4 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                    <Link href={`/product/${product.id}`} className="mt-4 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                         View Product
                     </Link>
                 </div>
