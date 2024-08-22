@@ -15,7 +15,6 @@ async function fetchProduct(id: string): Promise<Product | null> {
   if (!res.ok) {
     return null;
   }
-
   return res.json();
 }
 
