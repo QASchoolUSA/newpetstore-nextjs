@@ -1,39 +1,34 @@
+import { notFound } from 'next/navigation';
+import { Product } from '@/types/globals';
 import React from 'react';
+import ProductDetails from './ProductDetails';
 
-// Define the type for the product
-type Product = {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  category: string;
-};
-
-async function fetchProduct(id: string): Promise<Product | null> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/products/${id}`);
+async function getProduct(id: string): Promise<Product | null> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/products/${id}`, {
+    headers: {
+      'Authorization': `Bearer ${process.env.NEXT_PUBLIC_STRAPI_API_TOKEN}`,
+    },
+    next: {
+      revalidate: 60,
+    },
+  });
 
   if (!res.ok) {
-    return null;
+    throw new Error('Unable to retrieve a product.');
   }
-  return res.json();
+
+  const json = await res.json();
+  return json.data;
 }
 
-export default async function ProductPage({ params }: { params: { id: string } }) {
-  const product = await fetchProduct(params.id);
+const ProductPage = async ({ params }: { params: { id: string } }) => {
+  const product = await getProduct(params.id);
 
   if (!product) {
-    return <div>Product not found</div>;
+    notFound();
   }
 
-  return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
-      <img src={product.image} alt={product.name} className="w-full h-64 object-cover mb-4" />
-      <p className="text-xl text-gray-700 mb-2">Price: ${product.price.toFixed(2)}</p>
-      <p className="text-md text-gray-500">Category: {product.category}</p>
-      <p className="text-md text-gray-500 mt-4">
-        Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      </p>
-    </div>
-  );
-}
+  return <ProductDetails product={product} />
+};
+
+export default ProductPage;

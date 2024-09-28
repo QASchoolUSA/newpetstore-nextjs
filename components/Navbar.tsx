@@ -1,5 +1,5 @@
 import React from "react"; // Add the import statement for React
-import { NavigationMenu, NavigationMenuLink } from "@radix-ui/react-navigation-menu";
+import { NavigationMenu, NavigationMenuLink } from "@/components/ui/navigation-menu";
 import { ShoppingBag } from "lucide-react";
 
 const Navbar = () => {

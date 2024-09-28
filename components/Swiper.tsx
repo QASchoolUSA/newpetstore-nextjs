@@ -10,19 +10,17 @@ import Image from 'next/image';
 
 export default function SwiperWrapper() {
     return (
-        <div className=''>
-        <Swiper pagination={{ clickable: true }} loop={true} >
+        <div className='container pb-5'>
+        <Swiper className='swiper-container' pagination={{ clickable: true }} loop={true} >
             <SwiperSlide>
-                <Image layout="responsive" src="/assets/images/slider1.webp" alt="Slide 1" width={1100}  // Base width for desktop
-      height={500} />
+                <Image src="/assets/images/slider1.webp" alt="Slide 1" width={1400} height={700} />
             </SwiperSlide>
             <SwiperSlide>
-                <Image src="/assets/images/slider2.webp" alt="Slide 2" layout="responsive" width={1100}  // Base width for desktop
-      height={500} />
+                <Image src="/assets/images/slider2.webp" alt="Slide 2" width={1400} height={700} />
             </SwiperSlide>
-            {/* <SwiperSlide>
-                <Image src="/assets/images/slider2.webp" alt="Slide 2" className="w-full h-auto" />
-            </SwiperSlide> */}
+            <SwiperSlide>
+                <Image src="/assets/images/slider2.webp" alt="Slide 2" width={1400} height={700} />
+            </SwiperSlide>
         </Swiper>
         </div>
     );

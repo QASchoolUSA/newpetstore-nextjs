@@ -1,34 +1,57 @@
-import React from 'react';
-import { products } from '../data/products';
+'use client'
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Product } from '../types/globals'
+import { useCart } from '@/app/context/CartContext';
 import Link from 'next/link';
 
-const Products = ({ category }: { category?: string }) => {
-    const filteredProducts = category
-        ? products.filter((product) => product.category === category)
-        : products;
+const Products = () => {
+    const { addToCart } = useCart();
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/products?populate=*`, {
+                headers: {
+                    'Authorization': 'Bearer fa46add1111786e81f3ff8f153b74bf838c730d642a44c2ed833bf53fc3c41175fac9f69da6a30ae9992e97de9cf91984d4dd804d0eafdaa0070ad5ac60316006ed688702e27af3cb5b74df0632f68e9c6abb597b77e4f30919b7396f762b77a6335f6978d995020fead8e8b8f0450f8de3aca865bdb9b6c5176331f47375439'
+                }
+            });
+            const { data } = await res.json();
+            console.log(data);
+            setProducts(data);
+        }
+        fetchProducts();
+    }, []);
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
-                <div key={product.id} className="border p-4 rounded-lg">
-                    <Link href={`/product/${product.id}`}>
-                    <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-48 object-cover mb-4"
-                    />
-                    </Link>
-                    <Link href={`/product/${product.id}`}>
-                        <h2 className="text-lg font-bold">{product.name}</h2>
-                    </Link>
-                    <p className="text-gray-600">${product.price.toFixed(2)}</p>
-                    <Link href={`/product/${product.id}`} className="mt-4 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                        View Product
-                    </Link>
-                </div>
-            ))}
-        </div>
-    );
-};
+        <>
+            <div className="card products-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {products.map((product: Product) => (
+                    <Card key={product.id} >
+                        <Image className='container' src={`${process.env.NEXT_PUBLIC_STRAPI_API_URL}${product.attributes.image.data[0].attributes.formats.small.url}`} alt={product.attributes.title} width={250} height={250} />
+                        <CardHeader>
+                            <CardTitle className='text-md font-bold text-center'>
+                                <Link href={`/product/${product.id}`}>{product.attributes.title}</Link>
+                            </CardTitle>
+                            <CardDescription className='text-sm text-center'>{product.attributes.description}</CardDescription>
+                        </CardHeader>
+                        <CardFooter>
+                            <Button className='w-full' onClick={() => addToCart({
+                                id: product.id,
+                                title: product.attributes.title,
+                                price: product.attributes.price,
+                                quantity: 1,
+                                imageUrl: product.attributes.image.data[0].attributes.formats.small.url
+                            })}>Add to cart</Button>
+                        </CardFooter>
+                    </Card>
+                ))}
+            </div>
+        </>
+    )
+
+}
 
 export default Products;
